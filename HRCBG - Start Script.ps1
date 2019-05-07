@@ -20,11 +20,12 @@ $ResourceGroupName = "Yfo-Blackwood-Test"
 
 
 #---------------------VSTS function ---------------------#
-. C:\Azure\VSTS-Functions.ps1
+sl "C:\DevOps\DevOps"
+Import-Module .\VSTS-Functions.psm1
 Get-BuildAnalysis -buildDefinitionId 449 -PATToken "" -minTime "2019-04-24" -maxTime "2019-05-06" -StepsTakenMoreThan 5 -ov p
 #| Format-Table -AutoSize -Wrap -Expand | clip.exe
 
-Get-UnusedTaskGroups -vstsAccount "youforceone" -projectName "youforceone" -PATToken ""
+Get-UnusedTaskGroups -vstsAccount "youforceone" -projectName "youforceone" -PATToken "ogdkdoscf5ninzjcm65mqau55gnimjm2oalcezw5mm2xfoo4wzda"
 #---------------------VSTS function ---------------------#
 
 

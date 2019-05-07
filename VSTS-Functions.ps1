@@ -5,7 +5,7 @@
       [Parameter(HelpMessage='Project name as string')][string]$projectName = "YouforceOne",
       [Parameter(HelpMessage='Build Id')][string]$BuildId = "65486",
       [Parameter(Mandatory=$true,HelpMessage='YFO-Develop build definition id string')][string]$LogId,
-      [Parameter(HelpMessage='PAT Token')][string]$PATToken = "ogdkdoscf5ninzjcm65mqau55gnimjm2oalcezw5mm2xfoo4wzda"
+      [Parameter(Mandatory=$true, HelpMessage='PAT Token')][string]$PATToken
     )
     		
     
@@ -36,7 +36,7 @@ function Get-EachBuildStepInfo{
     [Parameter(HelpMessage='VSTS account name as string')][string]$vstsAccount = "YouforceOne",
     [Parameter(HelpMessage='Project name as string')][string]$projectName = "YouforceOne",
     [Parameter(HelpMessage='Build Id')][string]$BuildId = "65486",
-    [Parameter(HelpMessage='PAT Token')][string]$PATToken = "ogdkdoscf5ninzjcm65mqau55gnimjm2oalcezw5mm2xfoo4wzda"
+    [Parameter(Mandatory=$true, HelpMessage='PAT Token')][string]$PATToken
   )
 
   $base64AuthInfo = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes(("{0}:{1}" -f "",$PATToken)))

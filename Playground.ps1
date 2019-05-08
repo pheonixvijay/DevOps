@@ -17,6 +17,9 @@ $response |Format-Table -AutoSize -Wrap
 
 $test = [datetime]::Parse("2019-04-08T10:20:43.9360269Z")
 
+$date=Get-Date
+
+$date.ToShortDateString()
 
 $base64AuthInfo = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes(("{0}:{1}" -f "","ogdkdoscf5ninzjcm65mqau55gnimjm2oalcezw5mm2xfoo4wzda")))
 $authHeader = @{Authorization="Basic $base64AuthInfo"}
@@ -77,16 +80,32 @@ Get-AzureRmResource -ResourceGroupName $ResourceGroupName -Name $ResourceGroupNa
 
   $table = New-Object System.Data.DataTable
   
-  $table.Columns.Add("TaskGroup","string")
-  $table.Columns.Add("Owner","string")
-  $table.Columns.Add("LastModifiedOn","string")	
+$table.Columns.Add("TaskGroupId","string")| Out-Null
+  $table.Columns.Add("TaskGroup","string")| Out-Null
+  $table.Columns.Add("Owner","string")| Out-Null
+  $table.Columns.Add("LastModifiedOn","string")| Out-Null
+  $table.Columns.Add("URI","string")| Out-Null
+  
   $r = $table.NewRow()
-  $r.'TaskGroup'="test"
+  
+   $r.'TaskGroupId' = "65348023-059c-46d1-ae56-a3419fa61697"
+      $r.'TaskGroup' = "RLS-HRCBG-TEMPORAL Stop AuthorizationWebJob"
+      $r.'Owner' = "Aragón Olalla, Jose Mariano"
+      $r.'LastModifiedOn' = "3/29/2019"
+      $r.'URI' = "https://youforceone.visualstudio.com/youforceone/_taskgroup/65348023-059c-46d1-ae56-a3419fa61697"
+  		
   $table.Rows.Add($r)
-    $r = $table.NewRow()
-  $r.'TaskGroup'="test"
-  $table.Rows.Add($r)
-  write-host $table | Format-Table -AutoSize
+    $r = $table.NewRow()	
+    
+      $r.'TaskGroupId' = "65348023-059c-46d1-ae56-a3419fa61697"
+      $r.'TaskGroup' = "RLS-HRCBG-TEMPORAL Stop AuthorizationWebJob"
+      $r.'Owner' = "Aragón Olalla, Jose Mariano"
+      $r.'LastModifiedOn' = "3/29/2019"
+      $r.'URI' = "https://youforceone.visualstudio.com/youforceone/_taskgroup/65348023-059c-46d1-ae56-a3419fa61697"
+  
+  $table.Rows.Add($r)	
+  
+  $table | Sort-Object -Property $_.LastModifiedOn |  Export-Csv -Path "C:\Temp\UnusedTaskGroupAsOn$(get-date -f yyyy-MM-dd).csv" -NoTypeInformation
   
 
   $a = @{a=1;b=2;c=3;d=4}

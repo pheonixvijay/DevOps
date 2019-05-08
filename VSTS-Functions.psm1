@@ -227,9 +227,11 @@ function Get-UnusedTaskGroups{
 
   $table = New-Object System.Data.DataTable 
   
+  $table.Columns.Add("TaskGroupId","string")| Out-Null
   $table.Columns.Add("TaskGroup","string")| Out-Null
   $table.Columns.Add("Owner","string")| Out-Null
   $table.Columns.Add("LastModifiedOn","string")| Out-Null
+  $table.Columns.Add("URI","string")| Out-Null
   
   foreach ($TaskGroup in $AllTaskGroups.value)
   {
@@ -241,16 +243,48 @@ function Get-UnusedTaskGroups{
     
     if($Dependentbuilds.count -eq 0 -and $DependentReleases.count -eq 0 -and $DependentTaskGroup.count -eq 0){
     
-      $r.'TaskGroup'=$TaskGroup.name
-      $r.'Owner'=$TaskGroup.modifiedBy.displayName
-      $r.'LastModifiedOn'=[datetime]::Parse($TaskGroup.modifiedOn).ToShortDateString()
+      $r.'TaskGroupId' = $TaskGroup.id
+      $r.'TaskGroup' = $TaskGroup.name
+      $r.'Owner' = $TaskGroup.modifiedBy.displayName
+      $r.'LastModifiedOn' = [datetime]::Parse($TaskGroup.modifiedOn).ToShortDateString()
+      $r.'URI' = "https://$($vstsAccount).visualstudio.com/$($projectName)/_taskgroup/$($TaskGroup.id)"
       $table.Rows.Add($r)
-      #Write-Host "Task Group $($TaskGroup.name) is unused. It was authored by $($TaskGroup.author) and Last modified on $([datetime]::Parse($TaskGroup.modifiedOn).ToShortDateString())"
     }
   }
-  $table | Format-Table -AutoSize
+  $table | Sort-Object -Property $_.LastModifiedOn | Export-Csv -Path "C:\DevOps\DevOps\UnusedTaskGroupAsOn$(Get-date -f yyyyMMdd).csv" -NoTypeInformation
 }
 
+function Get-AzurePowershellVersionAnalysis{
+  [CmdletBinding()]
+  Param(
+    [Parameter(HelpMessage='VSTS account name as string')][string]$vstsAccount = "YouforceOne",
+    [Parameter(HelpMessage='Project name as string')][string]$projectName = "YouforceOne",
+    [Parameter(Mandatory=$true,HelpMessage='PAT Token')][string]$PATToken)
+  
+    $AllTaskGroups = Get-TaskGroups -vstsAccount $vstsAccount -projectName $projectName -PATToken $PATToken | Sort-Object -Property $_.modifiedOn
 
+  $table = New-Object System.Data.DataTable 
+  
+  $table.Columns.Add("TaskGroupId","string")| Out-Null
+  $table.Columns.Add("TaskGroup","string")| Out-Null
+  $table.Columns.Add("TaskDisplayName","string")| Out-Null
+  $table.Columns.Add("PsVersion","string")| Out-Null
+  
+  foreach ($TaskGroup in $AllTaskGroups.value)
+  { 
+    foreach ($item in $TaskGroup.tasks)
+    {
+      if(($item.inputs.ScriptPath -ne $null) -and ($item.inputs.ScriptPath -match ".ps1")){
+        $r = $table.NewRow()
+        $r.'TaskGroupId' = $TaskGroup.id
+        $r.'TaskGroup' = $TaskGroup.name
+        $r.'TaskDisplayName' = $item.displayName
+        $r.'PsVersion' = $item.task.versionSpec
+        $table.Rows.Add($r)   
+      }
+    }
+  }
+  $table | Sort-Object -Property $_.LastModifiedOn | Export-Csv -Path "C:\DevOps\DevOps\AzurePowershellVersionAnalysisOn$(Get-date -f yyyyMMdd).csv" -NoTypeInformation
+}
 
-Export-ModuleMember -Function Get-UnusedTaskGroups, Get-BuildAnalysis
+Export-ModuleMember -Function Get-UnusedTaskGroups, Get-BuildAnalysis, Get-AzurePowershellVersionAnalysis

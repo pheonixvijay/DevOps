@@ -25,7 +25,9 @@ Import-Module .\VSTS-Functions.psm1
 Get-BuildAnalysis -buildDefinitionId 449 -PATToken "" -minTime "2019-04-24" -maxTime "2019-05-06" -StepsTakenMoreThan 5 -ov p
 #| Format-Table -AutoSize -Wrap -Expand | clip.exe
 
-Get-UnusedTaskGroups -vstsAccount "youforceone" -projectName "youforceone" -PATToken "ogdkdoscf5ninzjcm65mqau55gnimjm2oalcezw5mm2xfoo4wzda"
+Get-UnusedTaskGroups -vstsAccount "youforceone" -projectName "youforceone" -PATToken "okqzxs2qrnpmpa5qobkjvmtyqano5sde6xbyuak5vtzwml2grywa"
+
+Get-AzurePowershellVersionAnalysis -vstsAccount "youforceone" -projectName "youforceone" -PATToken "okqzxs2qrnpmpa5qobkjvmtyqano5sde6xbyuak5vtzwml2grywa"
 #---------------------VSTS function ---------------------#
 
 

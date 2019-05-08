@@ -251,6 +251,9 @@ function Get-UnusedTaskGroups{
       $table.Rows.Add($r)
     }
   }
+  
+  New-Item -Path "C:\DevOps\DevOps" -ItemType Directory
+    
   $table | Sort-Object -Property $_.LastModifiedOn | Export-Csv -Path "C:\DevOps\DevOps\UnusedTaskGroupAsOn$(Get-date -f yyyyMMdd).csv" -NoTypeInformation
 }
 
@@ -274,7 +277,7 @@ function Get-AzurePowershellVersionAnalysis{
   { 
     foreach ($item in $TaskGroup.tasks)
     {
-      if(($item.inputs.ScriptPath -ne $null) -and ($item.inputs.ScriptPath -match ".ps1")){
+      if($item.task.id -eq "72a1931b-effb-4d2e-8fd8-f8472a07cb62"){
         $r = $table.NewRow()
         $r.'TaskGroupId' = $TaskGroup.id
         $r.'TaskGroup' = $TaskGroup.name
@@ -284,6 +287,7 @@ function Get-AzurePowershellVersionAnalysis{
       }
     }
   }
+  New-Item -Path "C:\DevOps\DevOps" -ItemType Directory
   $table | Sort-Object -Property $_.LastModifiedOn | Export-Csv -Path "C:\DevOps\DevOps\AzurePowershellVersionAnalysisOn$(Get-date -f yyyyMMdd).csv" -NoTypeInformation
 }
 

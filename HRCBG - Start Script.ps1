@@ -21,7 +21,7 @@ $ResourceGroupName = "Yfo-Blackwood-Test"
 
 #---------------------VSTS function ---------------------#
 sl "C:\DevOps\DevOps"
-Import-Module .\VSTS-Functions.psm1
+Import-Module .\AzureDevOps-Functions.psm1
 Get-BuildAnalysis -buildDefinitionId 449 -PATToken "" -minTime "2019-04-24" -maxTime "2019-05-06" -StepsTakenMoreThan 5 -ov p
 #| Format-Table -AutoSize -Wrap -Expand | clip.exe
 

@@ -1,0 +1,60 @@
+Alert is tied to a RG and consists of
+	1. Condition
+	2. Action
+	3. Name
+	
+Condition (Trigger)
+	1. On which metric the signal needs to be raised
+		a. This contains a time series
+	2. Dimension
+		It's a property whose values are dynamic and help to filter the time series
+	3. Alert
+		Threshold
+		Operator
+	4. Evaluation plan
+		Aggregation granularity
+		Evaluation Frequency
+
+Threshold gets hit so many times in so many minutes
+70% more than 5 minutes(Evaluation frequency)
+		
+Action (What to do. e.g Alert, Webhook, writing to a table)
+	1. Action group
+		a. Name, subscription and RG(DO we need a new RG for this?)
+		b. Actions
+			i. Name
+			ii. Action type (What are we going to target here? Email, WebHook, SMS )
+	
+Tie Action group with rule. 
+
+Questions?
+1. Can action group alone be created first? (Yes. Check if already exist and then link them) and then only alerts are created and then tied to the predefined action groups?
+2. On alert logic, are we going to configure static and dynamic? (Static and Limited Number of Metric) In case of dynamic do we enable to configure advanced settings as well? 
+3. On successful creation of an alert, we should also inform user on the cost of the alerts. have them in cost reporting (CLoudOps). Visible via debug or verbose
+	a. COncept is to create as many alerts as possible
+4. How do we manage alerts so that we don't alert on too many metrics and too many people? A report on alerts on how many got triggered in past one month?
+	a. In long term, we can deactivate them and delete them.
+5. What do we do with the existing alerts like DL monitor (basically reports), since the AZ alerts can deal with them. 
+	a. Basically a replacement needed and then disabled
+	b. Logical replacement would be specific alerts on specific teams
+	
+Email sent to team mail box with Mormont on CC and manager
+
+Manage action group -mormont -remove
+
+Questions in mind
+1. Won't too many options confuse teams on how to configure the alerts? How do we generalize or standardize them? (Make a plan, But start with a limited set of the options Email, Sms and Web hook)
+	a. Create a Action group 
+		i. Naming should be related to action. Purpose of group
+	b. Create action 
+		i. Limited DD (Email, SMS and Webhook)
+		ii. Name and Destination (Email address, ph number and webhook address)
+2. Does Action group are created based on company Hierarchy?
+3. Do we define default action groups? If yes, How do we deploy them, since they're at subscription level? Are we looking at AZ Automation here? (NO)
+	a. Only on long term vision 
+		
+FInal vision
+A TG like a alert on metric for action
+teams(Metric and Action comes together)
+Create web app, app service alert and ASB alerts
+Create certain alert and export them via ARM template and then compare them

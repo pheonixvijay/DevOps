@@ -22,6 +22,7 @@ $ResourceGroupName = "Yfo-Mormont-Test"
 
 #---------------------Azure Devops function ---------------------#
 sl "C:\DevOps\DevOps"
+psedit .\AzureDevOps-Functions.psm1
 Import-Module .\AzureDevOps-Functions.psm1 -Force
 $vstsAccount="youforceone"
 $projectName="youforceone"
@@ -31,7 +32,13 @@ Get-BuildAnalysis -buildDefinitionId 449 -PATToken $PATToken -minTime "2019-04-2
 
 Get-UnusedTaskGroups -vstsAccount "youforceone" -projectName "youforceone" -PATToken $PATToken
 
-Get-AzurePowershellVersionAnalysis -vstsAccount "youforceone" -projectName "youforceone" -PATToken $PATToken
+Get-AzurePowershellVersionAnalysis -vstsAccount "youforceone" -projectName "youforceone" -PATToken $PATToken -OutVariable PowerShellTasks
+
+ConvertTo-NewPowerShellVersionTask -vstsAccount "youforceone" -projectName "youforceone" -PATToken $PATToken -NewVersion '3.*'
+
+Get-TaskGroups -vstsAccount "youforceone" -projectName "youforceone" -PATToken $PATToken -OutVariable AllTaskGroups
+
+Get-TaskGroup  -vstsAccount "youforceone" -projectName "youforceone" -PATToken $PATToken -TaskGroupId '20eb5ea2-e5e2-4899-817b-e6f4f405db0c' -OutVariable TaskGroup
 
 Start-Build -vstsAccount "youforceone" -projectName "youforceone" -PATToken $PATToken -BuildDefinitionId 747 -SourceBranch "refs/heads/develop" -Parameters @{}
 
